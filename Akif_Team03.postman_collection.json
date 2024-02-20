@@ -1,0 +1,2605 @@
+{
+	"info": {
+		"_postman_id": "44f93ef5-9ed3-4f5c-9367-0301429ed1b0",
+		"name": "Akif_Team03",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32860153",
+		"_collection_link": "https://restless-spaceship-430927.postman.co/workspace/TechPro~cc1caa12-ae12-4998-8f2a-412ed535d5b4/collection/32789767-44f93ef5-9ed3-4f5c-9367-0301429ed1b0?action=share&source=collection_link&creator=32860153"
+	},
+	"item": [
+		{
+			"name": "Gokhan",
+			"item": [
+				{
+					"name": "User JWT Controller",
+					"item": [
+						{
+							"name": "jwtToken",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson=pm.response.json();\r",
+											"//Verify successfull response\r",
+											"pm.test(\"successfull response\",function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})\r",
+											"//Verify response content\r",
+											"pm.test(\"successfull body response\",function(){\r",
+											"    pm.expect(responseJson).haveOwnProperty(\"id_token\")\r",
+											"})\r",
+											"\r",
+											"//write accessToken as a Enviroment variable\r",
+											"pm.environment.set(\"team03_token\",responseJson.id_token)"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"{{team03_password}}\",\r\n  \"rememberMe\": true,\r\n  \"username\": \"{{team03_username}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Physcian",
+					"item": [
+						{
+							"name": "getAllPhyscian",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson =pm.response.json();\r",
+											"\r",
+											"//Verify successfull status code\r",
+											"pm.test(\"Verify Successful response :: Http status code 200 returned\",function(){\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"//Verification Point\r",
+											"pm.test(\"Verify that a list of ids equals to size\",function(){\r",
+											"    pm.expect(responseJson.length.toString()).to.equal(pm.collectionVariables.get(\"physician_size_team03\"));\r",
+											"})\r",
+											"pm.collectionVariables.set(\"physician_id\",responseJson.first().id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians?page={{physician_page_team03}}&size={{physician_size_team03}}&sort=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "{{physician_page_team03}}"
+										},
+										{
+											"key": "size",
+											"value": "{{physician_size_team03}}"
+										},
+										{
+											"key": "sort",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllPhyscianid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson =pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians/{{physician_id}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians",
+										"{{physician_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updatePhysician",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "    {\r\n        \"createdBy\": \"adminteam03\",\r\n        \"createdDate\": \"2023-02-21T10:54:57.215358Z\",\r\n        \"id\": 1324,\r\n        \"firstName\": \"Michael\",\r\n        \"lastName\": \"Anderson\",\r\n        \"birthDate\": \"1990-01-07T23:00:00Z\",\r\n        \"phone\": \"770-808-9925\",\r\n        \"gender\": \"MALE\",\r\n        \"bloodGroup\": \"Bpositive\",\r\n        \"adress\": \"istanbul\",\r\n        \"description\": \"\",\r\n        \"user\": {\r\n            \"createdBy\": \"anonymousUser\",\r\n            \"createdDate\": \"2023-02-21T10:29:32.657797Z\",\r\n            \"id\": 2514,\r\n            \"login\": \"mikeanderson\",\r\n            \"email\": \"gokhanyz@gmail.com\",\r\n            \"firstName\": \"Mike\",\r\n            \"lastName\": \"Anderson\",\r\n            \"activated\": true,\r\n            \"langKey\": \"en\",\r\n            \"imageUrl\": null,\r\n            \"resetDate\": null,\r\n            \"ssn\": \"748-40-8132\"\r\n        },\r\n        \"speciality\": \"INTERNAL_MEDICINE\",\r\n        \"appointments\": null,\r\n        \"country\": null,\r\n        \"cstate\": null,\r\n        \"examFee\": 150.00,\r\n        \"image\": \"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\",\r\n        \"imageContentType\": \"image/jpeg\"\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Patient",
+					"item": [
+						{
+							"name": "getAllPatients",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson=pm.response.json\r",
+											"\r",
+											"    pm.test(\"Verify Successful response :: Http status code 200 returned\", function () {\r",
+											"        pm.response.to.have.status(200);\r",
+											"    });"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/patients?page&size&sort",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"patients"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": null
+										},
+										{
+											"key": "size",
+											"value": null
+										},
+										{
+											"key": "sort",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getInPatientByDates",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/in-patients/bydate?fromDate=2024-03-15&toDate=2025-02-10",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"in-patients",
+										"bydate"
+									],
+									"query": [
+										{
+											"key": "fromDate",
+											"value": "2024-03-15"
+										},
+										{
+											"key": "toDate",
+											"value": "2025-02-10"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Appointments",
+					"item": [
+						{
+							"name": "getAllAppointments",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.collectionVariables.set(\"GokhanappotId\", responseJson.first().id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/appointments?filter&page&size&sort",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"appointments"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": null
+										},
+										{
+											"key": "page",
+											"value": null
+										},
+										{
+											"key": "size",
+											"value": null
+										},
+										{
+											"key": "sort",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllAppointmentsId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson=pm.response.json;\r",
+											"    pm.test(\"Status code is 200\", function () {\r",
+											"        pm.response.to.have.status(200);\r",
+											"    });"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/appointments/{{GokhanappotId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"appointments",
+										"{{GokhanappotId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Rooms",
+					"item": [
+						{
+							"name": "getAllRooms",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/rooms",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"rooms"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "createRoom",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json;\r",
+											"\r",
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"pm.collectionVariables.set(\"Gokhanroomid\", responseJson.id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "  {\r\n        \"createdBy\": \"\",\r\n        \"createdDate\": \"2024-02-15T07:28:11.582128Z\",\r\n        \"roomNumber\": 36357,\r\n        \"roomType\": \"TWIN\",\r\n        \"status\": true,\r\n        \"price\": 145.00,\r\n        \"description\": \"This room was created for test\"\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/rooms",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"rooms"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getroomsId",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/rooms/{{Gokhanroomid}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"rooms",
+										"{{Gokhanroomid}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteRoom",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/rooms/99400",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"rooms",
+										"99400"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Necmettin",
+			"item": [
+				{
+					"name": "User JWT Controller",
+					"item": [
+						{
+							"name": "jwtToken_Positive_Test",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"// Status code testing\r",
+											"pm.test(\"successfull response\",()=>{\r",
+											"    pm.response.to.have.status(200);\r",
+											"})\r",
+											"\r",
+											"// Response body testing\r",
+											"pm.test(\"successfull body response\",()=>{\r",
+											"    pm.expect(response).haveOwnProperty('id_token')\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"jwtToken Positive Test\")"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"{{team03_password}}\",\r\n  \"rememberMe\": true,\r\n  \"username\": \"{{team03_username}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "jwtToken_Negative_Test01",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"User JWT Controller - Token Negative Test\");\r",
+											"console.log(\"Invalid Password (Correct Integer Password) - Valid Username\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"// Status code testing",
+											"pm.test(\"Status code should be 401\",  ()=> {",
+											"    pm.expect(response.status).to.be.equal(401);",
+											"});",
+											"// Response body testing",
+											"pm.test(\"Response detail should be 'Bad credentials'\",  ()=> {",
+											"    pm.expect(response.detail).to.be.equal(\"Bad credentials\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": {{team03_password}},\r\n  \"rememberMe\": true,\r\n  \"username\": \"{{team03_username}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "jwtToken_Negative_Test02",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"User JWT Controller - Token Negative Test\");\r",
+											"console.log(\"Invalid Password (concat '0') - Valid Username\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"// Status code testing",
+											"pm.test(\"Status code should be 401\",  ()=> {",
+											"    pm.expect(response.status).to.be.equal(401);",
+											"});",
+											"// Response body testing",
+											"pm.test(\"Response detail should be 'Bad credentials'\",  ()=> {",
+											"    pm.expect(response.detail).to.be.equal(\"Bad credentials\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"{{team03_password}}0\",\r\n  \"rememberMe\": true,\r\n  \"username\": \"{{team03_username}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "jwtToken_Negative_Test03",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"User JWT Controller - Token Negative Test\");\r",
+											"console.log(\"Valid Password - Invalid Username (Concat 'z')\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"// Status code testing",
+											"pm.test(\"Status code should be 401\",  ()=> {",
+											"    pm.expect(response.status).to.be.equal(401);",
+											"});",
+											"// Response body testing",
+											"pm.test(\"Response detail should be 'Bad credentials'\",  ()=> {",
+											"    pm.expect(response.detail).to.be.equal(\"Bad credentials\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"{{team03_password}}\",\r\n  \"rememberMe\": true,\r\n  \"username\": \"{{team03_username}}z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "jwtToken_Negative_Test04",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"User JWT Controller - Token Negative Test\");\r",
+											"console.log(\"Valid Password - Invalid Username (out of Json variable type)\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"// Status code testing",
+											"pm.test('Status code should be 400', () => {",
+											"    pm.expect(response.status).to.be.equal(400);",
+											"})",
+											"// Response body testing ",
+											"pm.test(\"Response detail should include 'JSON parse error'\",  ()=> {",
+											"    pm.expect(response.detail).to.include('JSON parse error');",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"{{team03_password}}\",\r\n  \"rememberMe\": true,\r\n  \"username\": {{team03_username}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "jwtToken_Negative_Test05",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"User JWT Controller - Token Negative Test\");\r",
+											"console.log(\"Valid Password (Empty password)- Valid Username\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"// Status code testing",
+											"pm.test('Status code should be 400', () => {",
+											"    pm.expect(response.status).to.be.equal(400);",
+											"})",
+											"// Response body testing ",
+											"pm.test(\"Response detail should include 'JSON parse error'\",  ()=> {",
+											"    pm.expect(response.detail).to.include('JSON parse error');",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"{{team03_password}}\",\r\n  \"rememberMe\": true,\r\n  \"username\": {{team03_username}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "jwtToken_Negative_Test06",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"User JWT Controller - Token Negative Test\");\r",
+											"console.log(\"Invalid Password - Invalid Username (empty username)\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"// Status code testing",
+											"pm.test('Status code should be 400', () => {",
+											"    pm.expect(response.status).to.be.equal(400);",
+											"})",
+											"// Response body testing ",
+											"pm.test(\"Response detail should include 'JSON parse error'\",  ()=> {",
+											"    pm.expect(response.detail).to.include('JSON parse error');",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"{{team03_password}}\",\r\n  \"rememberMe\": true,\r\n  \"username\": {{team03_username}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Physcian",
+					"item": [
+						{
+							"name": "getAllPhysician",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"positive test\")"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Status code testing\r",
+											"const responseJson=pm.response.json();\r",
+											"pm.test(\"Status code is 200\", ()=> {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"//verifacition point\r",
+											"pm.test(\"verify that a list of ids equals to size\", ()=>{\r",
+											"    pm.expect(responseJson.length.toString()).to.equal(pm.collectionVariables.get('physician_size_team03'));\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians?page={{physician_page_team03}}&size={{physician_size_team03}}&sort",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "{{physician_page_team03}}"
+										},
+										{
+											"key": "size",
+											"value": "{{physician_size_team03}}"
+										},
+										{
+											"key": "sort",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getPhysicianId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Status code testing\r",
+											"const responseJson=pm.response.json();\r",
+											"pm.test(\"Status code is 200\", ()=> {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"//verifacition point\r",
+											"pm.test(\"verify physician id \", ()=>{\r",
+											"    pm.expect(responseJson.id).to.equal(5217);\r",
+											"});\r",
+											"// Negative test for verification of id (id connot be a String)\r",
+											"pm.test(\"verify physician id \", ()=>{\r",
+											"    pm.expect(responseJson.id).to.not.equal(\"5217\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"physcian id verification / Positive and Negative tests\")"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians/5217",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians",
+										"5217"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updatePhysicianId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();",
+											"// Verify status code",
+											"pm.test('Status code is 200', () => {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"// Verify successfull update of address ",
+											"pm.test(\"Updatating address\",()=>{",
+											"    pm.expect(responseJson).to.have.property('adress',\"Kayseri / TÜRKİYE\"); // adress value is a String (valid data type)",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Updating physcian Address and verification / Positive test\")\r",
+											"console.log(\"Update Test Data : Address : Kayseri / TÜRKİYE\" )"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"createdBy\": \"adminteam01\",\r\n    \"createdDate\": \"2023-02-28T22:32:37.769212Z\",\r\n    \"id\": 5217,\r\n    \"firstName\": \"Ayse\",\r\n    \"lastName\": \"Sezen\",\r\n    \"birthDate\": \"1980-02-28T00:00:00Z\",\r\n    \"phone\": \"3453453456\",\r\n    \"gender\": \"FEMALE\",\r\n    \"bloodGroup\": \"Opositive\",\r\n    \"adress\": \"{{Address}}\",\r\n    \"description\": \"\",\r\n    \"user\": {\r\n        \"createdBy\": \"anonymousUser\",\r\n        \"createdDate\": \"2023-02-28T22:15:22.549919Z\",\r\n        \"id\": 11978,\r\n        \"login\": \"doktorsezen\",\r\n        \"firstName\": \"Doktor\",\r\n        \"lastName\": \"Sezen\",\r\n        \"email\": \"ayse@gmail.com\",\r\n        \"activated\": true,\r\n        \"langKey\": \"en\",\r\n        \"imageUrl\": null,\r\n        \"resetDate\": null,\r\n        \"ssn\": \"222-66-2221\"\r\n    },\r\n    \"speciality\": \"UROLOGY\",\r\n    \"appointments\": null,\r\n    \"country\": {\r\n        \"id\": 7751,\r\n        \"name\": \"KANSAS\"\r\n    },\r\n    \"cstate\": null,\r\n    \"examFee\": 100.00,\r\n    \"image\": null,\r\n    \"imageContentType\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians/?id=5217",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians",
+										""
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "5217"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updatePhysicianId Negative Test",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();\r",
+											"// Verify status code\r",
+											"pm.test('Status code is 400', () => {\r",
+											"    pm.response.to.have.status(400);\r",
+											"})\r",
+											"// Verify successfull update of address \r",
+											"pm.test(\"Updatating address\",()=>{\r",
+											"    pm.expect(responseJson.detail).to.have.include(\"JSON parse error\"); // adress value is NOT a String (invalid data type)\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Updating physcian Address and verification / Negative tests\")\r",
+											"//  Update Test Data for test01 : Address : Kayseri / TÜRKİYE (Not a String)"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"createdBy\": \"adminteam01\",\r\n    \"createdDate\": \"2023-02-28T22:32:37.769212Z\",\r\n    \"id\": 5217,\r\n    \"firstName\": \"Ayse\",\r\n    \"lastName\": \"Sezen\",\r\n    \"birthDate\": \"1980-02-28T00:00:00Z\",\r\n    \"phone\": \"3453453456\",\r\n    \"gender\": \"FEMALE\",\r\n    \"bloodGroup\": \"Opositive\",\r\n    \"adress\":{{Address}} ,\r\n    \"description\": \"\",\r\n    \"user\": {\r\n        \"createdBy\": \"anonymousUser\",\r\n        \"createdDate\": \"2023-02-28T22:15:22.549919Z\",\r\n        \"id\": 11978,\r\n        \"login\": \"doktorsezen\",\r\n        \"firstName\": \"Doktor\",\r\n        \"lastName\": \"Sezen\",\r\n        \"email\": \"ayse@gmail.com\",\r\n        \"activated\": true,\r\n        \"langKey\": \"en\",\r\n        \"imageUrl\": null,\r\n        \"resetDate\": null,\r\n        \"ssn\": \"222-66-2221\"\r\n    },\r\n    \"speciality\": \"UROLOGY\",\r\n    \"appointments\": null,\r\n    \"country\": {\r\n        \"id\": 7751,\r\n        \"name\": \"KANSAS\"\r\n    },\r\n    \"cstate\": null,\r\n    \"examFee\": 100.00,\r\n    \"image\": null,\r\n    \"imageContentType\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians/?id=5217",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians",
+										""
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "5217"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Patient",
+					"item": [
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Appointments",
+					"item": [
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Rooms",
+					"item": [
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Mustafa",
+			"item": [
+				{
+					"name": "User JWT Controller",
+					"item": [
+						{
+							"name": "jwt_token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson=pm.response.json();//get response body\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);         //verify status code\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"id_token\");// verify body have \"id_token\"\r",
+											"});\r",
+											"\r",
+											"pm.environment.set(\"team03_token\",responseJson.id_token)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Running token generation\")"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"{{team03_password}}\",\r\n  \"rememberMe\": true,\r\n  \"username\": \"{{team03_username}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "jwt_token_negative1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Running token negative test\")\r",
+											"console.log(\"Invalid password\")"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson=pm.response.json();//get response body\r",
+											"\r",
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);         //verify status code\r",
+											"\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Invalid passsword\", function () {\r",
+											"    pm.expect(responseJson.title).to.eql(\"Unauthorized\"); //verify title value equal to \"Unauthorized\"\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"{{team03_password}}w\",\r\n  \"rememberMe\": true,\r\n  \"username\": \"{{team03_username}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "jwt_token_negative2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Running token negative test\")\r",
+											"console.log(\"Invalid username\")"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson=pm.response.json();//get response body\r",
+											"\r",
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);         //verify status code\r",
+											"\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Invalid passsword\", function () {;\r",
+											"    pm.expect(responseJson.title).to.eql(\"Unauthorized\"); //verify title value equal to \"Unauthorized\"\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"{{team03_password}}\",\r\n  \"rememberMe\": true,\r\n  \"username\": \"{{team03_username}}w\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "jwt_token_negative3",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Running token negative test\")\r",
+											"console.log(\"Empty body\")"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson=pm.response.json();//get response body\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);         //verify status code\r",
+											"\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"error.validation\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"\",\r\n  \"rememberMe\": true,\r\n  \"username\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate?=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Physcian",
+					"item": [
+						{
+							"name": "getAllPhysicians",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson=pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//pm.collectionVariables.set('physician_id_team03', responseJson.first().id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians?page={{physician_page_team03}}&size={{physician_size_team03}}&sort=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "{{physician_page_team03}}"
+										},
+										{
+											"key": "size",
+											"value": "{{physician_size_team03}}"
+										},
+										{
+											"key": "sort",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getPhysicianId",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians/{{physician_id_team03}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians",
+										"{{physician_id_team03}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Patient",
+					"item": [
+						{
+							"name": "getAllInPatients",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "getInPatientsByDates",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"method": "POST",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Appointments",
+					"item": [
+						{
+							"name": "getAllAppointments",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "getAllAppointmentsId",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Rooms",
+					"item": [
+						{
+							"name": "getAllRooms",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "createRoom",
+							"request": {
+								"method": "POST",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "getRoomsId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteRoom",
+							"request": {
+								"method": "DELETE",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Erdal",
+			"item": [
+				{
+					"name": "User JWT Controller",
+					"item": []
+				},
+				{
+					"name": "Physcian",
+					"item": []
+				},
+				{
+					"name": "Patient",
+					"item": []
+				},
+				{
+					"name": "Appointments",
+					"item": []
+				},
+				{
+					"name": "Rooms",
+					"item": []
+				}
+			]
+		},
+		{
+			"name": "Zeynep",
+			"item": [
+				{
+					"name": "User JWT Controller",
+					"item": [
+						{
+							"name": "jwtToken",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Running token generation\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();\r",
+											"//verify successful response \r",
+											"pm.test(\"Successful response \", function()\r",
+											"{\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"//verify successful content\r",
+											"pm.test(\"Successful body response \" , function() {\r",
+											"    pm.expect(responseJson).haveOwnProperty(\"id_token\")\r",
+											"});\r",
+											"//write accessToken as a environment variable\r",
+											"pm.environment.set('team03_token',responseJson.id_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"{{team03_password}}\",\r\n    \"rememberMe\": true,\r\n    \"username\": \"{{team03_username}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Physician",
+					"item": [
+						{
+							"name": "getAllPhysicians",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Getting all physicians\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();\r",
+											"//verify successful status code\r",
+											"pm.test(\"Verify Successful response :: http status code 200 returned\" , function() {\r",
+											"pm.response.to.have.status(200)\r",
+											"});\r",
+											"//verification point\r",
+											"pm.test(\"Verify that a list of ids equals to size\" , function() {\r",
+											"pm.expect(responseJson.length.toString()).to.equal(pm.collectionVariables.get(\"physician_size_team03\"));\r",
+											"});\r",
+											"pm.collectionVariables.set(\"physician_id_team03\",responseJson.last().id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians?page={{physician_page_team03}}&size={{physician_size_team03}}&sort={{physician_sort_team03}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "{{physician_page_team03}}"
+										},
+										{
+											"key": "size",
+											"value": "{{physician_size_team03}}"
+										},
+										{
+											"key": "sort",
+											"value": "{{physician_sort_team03}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getPhysicianId",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Getting physician id\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Verify successful response : http status code 200 returned \",\r",
+											"function() {\r",
+											"pm.response.to.have.status(200)\r",
+											"    });\r",
+											"\r",
+											"pm.test(\"Verify id \", function() {\r",
+											"    pm.expect(responseJson.id.toString()).to.equal(\"96691\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians/{{physician_id_team03}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians",
+										"{{physician_id_team03}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updatePhysician",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Update physician\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.collectionVariables.set(\"specialty\", \"RADIOLOGY\");\r",
+											"pm.test(\"Verify specialty \" , function() {\r",
+											"    pm.expect(pm.collectionVariables.get(\"specialty\")).to.equal(\"RADIOLOGY\")\r",
+											"});\r",
+											"\r",
+											"pm.collectionVariables.set(\"email\", \"a@gmail.com\");\r",
+											"pm.test(\"Verify email \" , function() {\r",
+											"pm.expect(pm.collectionVariables.get(\"email\")).to.equal(\"a@gmail.com\")\r",
+											"});\r",
+											"\r",
+											"pm.collectionVariables.set(\"adres\", \"Hyde Park\");\r",
+											"pm.test(\"Verify adres \" , function() {\r",
+											"    pm.expect(pm.collectionVariables.get(\"adres\")).to.equal(\"Hyde Park\")\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"createdBy\": \"halley2020\",\r\n    \"createdDate\": \"2023-11-03T19:53:52.291925Z\",\r\n    \"id\": 25684,\r\n    \"firstName\": \"haci\",\r\n    \"lastName\": \"Fusfus\",\r\n    \"birthDate\": \"2000-11-02T22:00:00Z\",\r\n    \"phone\": \"111-222-3333\",\r\n    \"gender\": \"MALE\",\r\n    \"bloodGroup\": \"Apositive\",\r\n    \"adress\": \" 76 caddesi\",\r\n    \"description\": \"\",\r\n    \"user\": {\r\n        \"createdBy\": \"anonymousUser\",\r\n        \"createdDate\": \"2023-03-03T00:14:42.049526Z\",\r\n        \"id\": 14062,\r\n        \"login\": \"user_112233445_56677889991677802481954\",\r\n        \"firstName\": \"Rudy\",\r\n        \"lastName\": \"Greenholt\",\r\n        \"email\": \"thurman.walker@gmail.com\",\r\n        \"activated\": false,\r\n        \"langKey\": null,\r\n        \"imageUrl\": null,\r\n        \"resetDate\": null,\r\n        \"ssn\": \"063-58-2799\"\r\n    },\r\n    \"speciality\": \"SURGERY\",\r\n    \"appointments\": null,\r\n    \"country\": {\r\n        \"id\": 24331,\r\n        \"name\": \"turkiye\"\r\n    },\r\n    \"cstate\": null,\r\n    \"examFee\": 500.00,\r\n    \"image\": \"\",\r\n    \"imageContentType\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/physicians",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"physicians"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Patient",
+					"item": [
+						{
+							"name": "getAllPatients",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Getting all patients\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify all patients \" , function() {\r",
+											"pm.response.to.have.status(200)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/patients",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"patients"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getInPatientByDatesAndUser",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Check date params\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Date control\", function () {\r",
+											"    pm.expect(pm.collectionVariables.get(\"startDate\")) <\r",
+											"    (pm.collectionVariables.get(\"endDate\"))\r",
+											"});\r",
+											"// Test for response time\r",
+											"pm.test(\"Response time is within acceptable range\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/in-patients/bydateanduser\n?startDate=&endDate=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"in-patients",
+										"bydateanduser\n"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": ""
+										},
+										{
+											"key": "endDate",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Appointments",
+					"item": [
+						{
+							"name": "getAppointment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Getting first id\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Verify first id \" , function() {\r",
+											"    pm.expect(responseJson.id.toString()).to.equal(\"5993\")\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/appointments/{id}?id=5993",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"appointments",
+										"{id}"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "5993"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllAppointments",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Getting all appointments\");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/appointments",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"appointments"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Rooms",
+					"item": [
+						{
+							"name": "getAllRooms",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Getting all rooms\")"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/rooms\ngetAllRooms",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"rooms\ngetAllRooms"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "createRoom",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Create room\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"const roomId = responseJson.id;\r",
+											"pm.collectionVariables.set(\"roomIDZeynep\", roomId);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"createdBy\": \"Ben\",\r\n\"createdDate\": \"2026-02-20T10:24:50.625Z\",\r\n\"description\": \"Private\",\r\n\"id\": 2002,\r\n\"price\": 100,\r\n\"roomNumber\": 2,\r\n\"roomType\": \"Double\",\r\n\"status\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/rooms\n",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"rooms\n"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteRoom",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"Delete room\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{team03_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/rooms/{id}?id=2002",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"rooms",
+										"{id}"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "2002"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{team03_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://www.medunna.com",
+			"type": "string"
+		},
+		{
+			"key": "team03_username",
+			"value": "GokhanYilmaz",
+			"type": "string"
+		},
+		{
+			"key": "team03_password",
+			"value": "1234567890",
+			"type": "string"
+		},
+		{
+			"key": "team03_token",
+			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnb2toYW55aWxtYXoiLCJhdXRoIjoiUk9MRV9BRE1JTiIsImV4cCI6MTcxMDI4MDczNX0.61IuuPsliOB_pm0HiZhstf41fOH2BM2eNKuGDWu35tW0aQxlZu-wF1JcRkXtZq09m5X46SeFQAfL7Yiq0B03HA",
+			"type": "string"
+		},
+		{
+			"key": "physician_size_team03",
+			"value": "7"
+		},
+		{
+			"key": "physician_page_team03",
+			"value": "2",
+			"type": "string"
+		},
+		{
+			"key": "GokhanappotId",
+			"value": ""
+		},
+		{
+			"key": "Gokhanroomid",
+			"value": ""
+		},
+		{
+			"key": "Address",
+			"value": "Kayseri / TÜRKİYE",
+			"type": "string"
+		},
+		{
+			"key": "physician_id_team03",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "physician_sort_team03",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "specialty",
+			"value": ""
+		},
+		{
+			"key": "RADIOLOGY",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "adres",
+			"value": ""
+		},
+		{
+			"key": "roomIDZeynep",
+			"value": ""
+		}
+	]
+}
